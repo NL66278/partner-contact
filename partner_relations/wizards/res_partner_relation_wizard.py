@@ -4,7 +4,8 @@
 from openerp import _, api, exceptions, fields, models
 from openerp.osv.expression import FALSE_LEAF
 
-from .res_partner import PADDING
+
+PADDING = 10
 
 
 class ResPartnerRelationWizard(models.TransientModel):
