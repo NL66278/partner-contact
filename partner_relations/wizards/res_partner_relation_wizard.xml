@@ -20,25 +20,14 @@
             </field>
         </record>
 
-        <record
+        <act_window
             id="action_res_partner_relation_wizard"
-            model="ir.actions.act_window"
-            >
-            <field name="name">Relations</field>
-            <field name="res_model">res.partner.relation.wizard</field>
-            <field name="src_model">res.partner.relation.all</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="multi">True</field>
-            <field name="view_id" ref="form_res_partner_relation_all"/>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                    Record and track your partners' relations. Relations may
-                    be linked to other partners with a type either directly
-                    or inversely.
-                </p>
-            </field>
-        </record>
+            name="Relations"
+            res_model="res.partner.relation.wizard"
+            src_model="res.partner.relation.all"
+            multi="True"
+            view_id="form_res_partner_relation_all"
+            />
 
     </data>
 </openerp>
