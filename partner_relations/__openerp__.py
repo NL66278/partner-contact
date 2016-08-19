@@ -20,6 +20,7 @@
         'views/res_partner.xml',
         'views/res_partner_relation_type.xml',
         'views/menu.xml',
+        "wizards/res_partner_relation_wizard.xml",
         'security/ir.model.access.csv',
     ],
     "auto_install": False,
