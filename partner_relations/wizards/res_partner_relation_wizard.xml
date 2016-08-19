@@ -29,6 +29,7 @@
             <field name="src_model">res.partner.relation.all</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
+            <field name="multi">True</field>
             <field name="view_id" ref="form_res_partner_relation_all"/>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
