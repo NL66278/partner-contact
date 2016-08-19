@@ -10,7 +10,7 @@ PADDING = 10
 
 class ResPartnerRelationWizard(models.TransientModel):
     """Wizard to easily add or change a new relation between two partners."""
-    _name = 'res.partner.relationi.wizard'
+    _name = 'res.partner.relation.wizard'
     _description = 'Partner relation wizard'
     _order = 'active desc, date_start desc, date_end desc'
 
