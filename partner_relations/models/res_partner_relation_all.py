@@ -26,8 +26,6 @@ class ResPartnerRelationAll(models.AbstractModel):
         'date_end desc, date_start desc'
     )
 
-    _overlays = 'res.partner.relation'
-
     _additional_view_fields = []
     """append to this list if you added fields to res_partner_relation that
     you need in this model and related fields are not adequate (ie for sorting)
@@ -253,102 +251,6 @@ CREATE OR REPLACE VIEW %(table)s AS
                 ('contact_type_this', '=', False),
                 ('contact_type_this', '=',
                  self.this_partner_id.get_partner_type()),
-                '|',
-                ('partner_category_this', '=', False),
-                ('partner_category_this', 'in',
-                 self.this_partner_id.category_id.ids),
-            ]
-        if self.other_partner_id:
-            type_selection_domain += [
-                '|',
-                ('contact_type_other', '=', False),
-                ('contact_type_other', '=',
-                 self.other_partner_id.get_partner_type()),
-                '|',
-                ('partner_category_other', '=', False),
-                ('partner_category_other', 'in',
-                 self.other_partner_id.category_id.ids),
-            ]
-        result = {'domain': {
-            'type_selection_id': type_selection_domain,
-        }}
-        # Check wether domain results in no choice or wrong choice for
-        # type_selection_id:
-        warning = check_type_selection_domain(type_selection_domain)
-        if warning:
-            result['warning'] = warning
-        return result
-
-    @api.model
-    def _correct_vals(self, vals):
-        """Fill left and right partner from this and other partner."""
-        vals = vals.copy()
-        if 'this_partner_id' in vals:
-            vals['left_partner_id'] = vals['this_partner_id']
-            del vals['this_partner_id']
-        if 'other_partner_id' in vals:
-            vals['right_partner_id'] = vals['other_partner_id']
-            del vals['other_partner_id']
-        if 'type_selection_id' not in vals:
-            return vals
-        selection = self.type_selection_id.browse(vals['type_selection_id'])
-        type_id = selection.type_id.id
-        is_inverse = selection.is_inverse
-        vals['type_id'] = type_id
-        del vals['type_selection_id']
-        # Need to switch right and left partner if we are in reverse id:
-        if 'left_partner_id' in vals or 'right_partner_id' in vals:
-            if is_inverse:
-                left_partner_id = False
-                right_partner_id = False
-                if 'left_partner_id' in vals:
-                    right_partner_id = vals['left_partner_id']
-                    del vals['left_partner_id']
-                if 'right_partner_id' in vals:
-                    left_partner_id = vals['right_partner_id']
-                    del vals['right_partner_id']
-                if left_partner_id:
-                    vals['left_partner_id'] = left_partner_id
-                if right_partner_id:
-                    vals['right_partner_id'] = right_partner_id
-        return vals
-
-        def check_type_selection_domain(type_selection_domain):
-            """Check wether type_selection_domain results in empty selection
-            for type_selection_id, or wrong selection if already selected.
-            """
-            warning = {}
-            if not type_selection_domain:
-                return warning
-            if self.type_selection_id:
-                test_domain = (
-                    [('id', '=', self.type_selection_id.id)] +
-                    type_selection_domain
-                )
-            else:
-                test_domain = type_selection_domain
-            type_model = self.env['res.partner.relation.type.selection']
-            types_found = type_model.search(test_domain, limit=1)
-            if not types_found:
-                if self.type_selection_id:
-                    message = _(
-                        'Relation type incompatible with selected partner(s).'
-                    )
-                else:
-                    message = _(
-                        'No relation type available for selected partners.'
-                    )
-                warning = {'title': _('Error!'), 'message': message}
-            return warning
-
-        type_selection_domain = []
-        if self.this_partner_id:
-            type_selection_domain += [
-                '|',
-                ('contact_type_this', '=', False),
-                ('contact_type_this', '=',
-                 self.this_partner_id.get_partner_type()
-                ),
                 '|',
                 ('partner_category_this', '=', False),
                 ('partner_category_this', 'in',
