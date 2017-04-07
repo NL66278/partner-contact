@@ -45,11 +45,11 @@ class ResPartnerRelationType(models.Model):
     )
     partner_category_left = fields.Many2one(
         comodel_name='res.partner.category',
-        string='Left partner category',
+        string='Left partner tag',
     )
     partner_category_right = fields.Many2one(
         comodel_name='res.partner.category',
-        string='Right partner category',
+        string='Right partner tag',
     )
     allow_self = fields.Boolean(
         string='Reflexive',
@@ -68,7 +68,7 @@ class ResPartnerRelationType(models.Model):
         string='Invalid relation handling',
         required=True,
         default='restrict',
-        help="When adding relations criteria like partner type and category"
+        help="When adding relations criteria like partner type and tag"
              " are checked.\n"
              "However when you change the criteria, there might be relations"
              " that do not fit the new criteria.\n"

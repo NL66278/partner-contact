@@ -36,7 +36,6 @@ addon | version | summary
 [partner_firstname](partner_firstname/) | 10.0.2.0.0 | Split first name and last name for non company partners
 [partner_helper](partner_helper/) | 10.0.0.1.0 | Add specific helper methods
 [partner_identification](partner_identification/) | 10.0.1.0.1 | Partner Identification Numbers
-[partner_multi_relation](partner_multi_relation/) | 10.0.1.0.0 | Partner Relations
 [partner_street_number](partner_street_number/) | 10.0.1.0.0 | Introduces separate fields for street name and street number.
 
 
@@ -52,6 +51,7 @@ addon | version | summary
 [partner_auto_salesman](partner_auto_salesman/) | 8.0.1.0.0 (unported) | Partner auto salesman
 [partner_contact_address_detailed](partner_contact_address_detailed/) | 8.0.1.0.0 (unported) | All address data in summarized contact form
 [partner_contact_nationality](partner_contact_nationality/) | 9.0.1.0.0 (unported) | Add nationality field to contacts
+[partner_relations](partner_relations/) | 8.0.1.1.0 (unported) | Partner relations
 [portal_partner_merge](portal_partner_merge/) | 8.0.1.0.0 (unported) | Portal Partner Merge
 [res_partner_affiliate](res_partner_affiliate/) | 8.0.1.0.0 (unported) | Partner Affiliates
 
@@ -63,8 +63,8 @@ Translation Status
 
 ----
 
-OCA, or the Odoo Community Association, is a nonprofit organization whose 
-mission is to support the collaborative development of Odoo features and 
+OCA, or the Odoo Community Association, is a nonprofit organization whose
+mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
 http://odoo-community.org/
