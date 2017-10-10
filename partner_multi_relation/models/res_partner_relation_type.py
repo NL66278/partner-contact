@@ -173,3 +173,20 @@ class ResPartnerRelationType(models.Model):
         """Handle existing relations if conditions change."""
         self.check_existing(vals)
         return super(ResPartnerRelationType, self).write(vals)
+
+    @api.multi
+    def unlink(self):
+        """Allow delete of relation type, even when connections exist.
+
+        Relations can be deleted if relation type allows it.
+        """
+        relation_model = self.env['res.partner.relation']
+        for rec in self:
+            if rec.handle_invalid_onchange == 'delete':
+                # Automatically delete relations, so existing relations
+                # do not prevent unlink of relation type:
+                relations = relation_model.search([
+                    ('type_id', '=', rec.id),
+                ])
+                relations.unlink()
+        return super(ResPartnerRelationType, self).unlink()

@@ -278,3 +278,40 @@ class TestPartnerRelation(TestPartnerRelationCommon):
             'contact_type_right': 'p',
         })
         self.assertFalse(relation_bart2lisa.exists())
+
+    def test_relation_type_unlink(self):
+        """Test change in relation type conditions."""
+        # First create a relation type having restrict particular conditions.
+        type_model = self.env['res.partner.relation.type']
+        relation_model = self.env['res.partner.relation']
+        partner_model = self.env['res.partner']
+        type_school2student = type_model.create({
+            'name': 'school has student',
+            'name_inverse': 'studies at school',
+            'handle_invalid_onchange': 'restrict',
+        })
+        # Second create relation based on those conditions.
+        partner_school = partner_model.create({
+            'name': 'Test School',
+            'is_company': True,
+            'ref': 'TS',
+        })
+        partner_bart = partner_model.create({
+            'name': 'Bart Simpson',
+            'is_company': False,
+            'ref': 'BS',
+        })
+        relation_school2bart = relation_model.create({
+            'left_partner_id': partner_school.id,
+            'type_id': type_school2student.id,
+            'right_partner_id': partner_bart.id,
+        })
+        # Unlink should for the moment lead to error because of restrict:
+        with self.assertRaises(ValidationError):
+            type_school2student.unlink()
+        # Now change to delete and try to unlink again:
+        type_school2student.write({
+            'handle_invalid_onchange': 'delete',
+        })
+        type_school2student.unlink()
+        self.assertFalse(relation_school2bart.exists())
