@@ -11,7 +11,7 @@
     "license": "AGPL-3",
     "website": "https://github.com/oca/partner-contact",
     "depends": [
-        'contacts',
+        'sales_team',
         'web_domain_field',
         'web_tree_many2one_clickable',
     ],
