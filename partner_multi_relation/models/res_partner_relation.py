@@ -25,6 +25,7 @@ class ResPartnerRelation(models.Model):
         required=True,
         auto_join=True,
         ondelete='cascade',
+        index=True,
     )
     right_partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -32,12 +33,14 @@ class ResPartnerRelation(models.Model):
         required=True,
         auto_join=True,
         ondelete='cascade',
+        index=True,
     )
     type_id = fields.Many2one(
         comodel_name='res.partner.relation.type',
         string='Type',
         required=True,
         auto_join=True,
+        index=True,
     )
     date_start = fields.Date('Starting date')
     date_end = fields.Date('Ending date')
