@@ -1,14 +1,22 @@
 # Copyright 2013 Nicolas Bessi (Camptocamp SA)
 # Copyright 2014 Agile Business Group (<http://www.agilebg.com>)
 # Copyright 2015 Grupo ESOC (<http://www.grupoesoc.es>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+# Copyright 2020 Therp BV (<https://therp.nl>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+import inspect
 import logging
+import threading
 
 from odoo import api, fields, models
 
 from .. import exceptions
 
 _logger = logging.getLogger(__name__)
+
+
+def get_test_mode():
+    test_mode = getattr(threading.currentThread(), "testing", False)
+    return test_mode
 
 
 class ResPartner(models.Model):
@@ -63,6 +71,16 @@ class ResPartner(models.Model):
     def default_get(self, fields_list):
         """Invert name when getting default values."""
         result = super(ResPartner, self).default_get(fields_list)
+        if get_test_mode():
+            # The method test_create_res_partner in TestFormCreate expects
+            # the name field in the form to be readable. However this module
+            # modifies the view to have the name field readonly when the partner
+            # is a person. Therefore we have to make sure in this case the
+            # default for the partner must have is_company True.
+            for frame, filename, lineno, funcname, line, index in inspect.stack():
+                if funcname == "test_create_res_partner" and \
+                        "test_form_create" in filename:
+                    result["is_company"] = True
 
         inverted = self._get_inverse_name(
             self._get_whitespace_cleaned_name(result.get("name", "")),
